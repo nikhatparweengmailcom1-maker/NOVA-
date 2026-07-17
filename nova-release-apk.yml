@@ -1,0 +1,133 @@
+name: Build Signed Release APK
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Version name (e.g. 1.0.0)'
+        required: true
+        default: '1.0.0'
+
+jobs:
+  build-release:
+    name: Build & Sign Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Java 17 ───────────────────────────────────────────────────────────
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      # ── 3. Bootstrap gradle-wrapper.jar ──────────────────────────────────────
+      - name: Bootstrap Gradle Wrapper
+        run: |
+          cd nova-android
+          if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
+            curl -fsSL https://services.gradle.org/distributions/gradle-8.4-bin.zip \
+              -o /tmp/gradle-8.4-bin.zip
+            unzip -q /tmp/gradle-8.4-bin.zip -d /tmp/
+            /tmp/gradle-8.4/bin/gradle wrapper --gradle-version 8.4 \
+              --distribution-type bin
+          fi
+
+      # ── 4. Accept Android SDK licenses ───────────────────────────────────────
+      - name: Accept Android SDK licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+      # ── 5. Decode keystore from secret ───────────────────────────────────────
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode \
+            > nova-android/app/nova-release.keystore
+
+      # ── 5. Make gradlew executable ────────────────────────────────────────────
+      - name: Grant execute permission for gradlew
+        run: chmod +x nova-android/gradlew
+
+      # ── 6. Determine version name ─────────────────────────────────────────────
+      - name: Resolve version name
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            # Strip leading 'v' from tag name
+            echo "name=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+          else
+            echo "name=${{ github.event.inputs.version_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      # ── 7. Build release APK ──────────────────────────────────────────────────
+      - name: Build Release APK
+        working-directory: nova-android
+        run: |
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=nova-release.keystore \
+            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+            -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+            -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
+            --stacktrace --no-daemon
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false"
+
+      # ── 8. Rename APK ─────────────────────────────────────────────────────────
+      - name: Rename APK
+        run: |
+          mkdir -p apk-output
+          APK_NAME="NOVA-${{ steps.version.outputs.name }}-release.apk"
+          cp nova-android/app/build/outputs/apk/release/app-release.apk \
+             apk-output/$APK_NAME
+          echo "APK_PATH=apk-output/$APK_NAME"   >> $GITHUB_ENV
+          echo "APK_NAME=$APK_NAME"               >> $GITHUB_ENV
+          echo "VERSION=${{ steps.version.outputs.name }}" >> $GITHUB_ENV
+
+      # ── 9. Upload as workflow artifact ────────────────────────────────────────
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NOVA-${{ env.VERSION }}-release
+          path: ${{ env.APK_PATH }}
+          retention-days: 90
+
+      # ── 10. Create GitHub Release with APK ────────────────────────────────────
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name || format('v{0}', env.VERSION) }}
+          name: "NOVA v${{ env.VERSION }}"
+          body: |
+            ## 📱 NOVA v${{ env.VERSION }} — Signed Release APK
+
+            Built from commit `${{ github.sha }}`.
+
+            ### How to install
+            1. Download **${{ env.APK_NAME }}** below.
+            2. Open the file on your Android phone.
+            3. Enable **Install unknown apps** if prompted.
+            4. Tap **Install**.
+            5. Open **NOVA** → ⚙ Settings → enter your API key.
+
+            ### What's in this release
+            - Full Jetpack Compose UI with holographic NOVA theme
+            - Voice assistant with wake-word detection
+            - OpenAI & Gemini AI support (switchable in Settings)
+            - Reminders, Todos, QR scanner, Flashlight, App launcher
+            - All data stored locally on device
+          files: ${{ env.APK_PATH }}
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── 11. Clean up keystore from runner ─────────────────────────────────────
+      - name: Remove keystore from runner
+        if: always()
+        run: rm -f nova-android/app/nova-release.keystore
