@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Nova" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/nova_primary</item>
+        <item name="colorPrimaryVariant">@color/nova_primary_variant</item>
+        <item name="colorSecondary">@color/nova_secondary</item>
+        <item name="colorSecondaryVariant">@color/nova_secondary_variant</item>
+        <item name="colorSurface">@color/bg_surface</item>
+        <item name="colorBackground">@color/bg_deep_space</item>
+        <item name="colorError">@color/error</item>
+        <item name="android:windowBackground">@color/bg_deep_space</item>
+        <item name="android:statusBarColor">@color/bg_deep_space</item>
+        <item name="android:navigationBarColor">@color/bg_deep_space</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="Theme.Nova.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/bg_deep_space</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_nova_splash</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.Nova</item>
+    </style>
+
+    <style name="Theme.Nova.Notification" parent="Theme.Nova">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+</resources>

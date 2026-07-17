@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- NOVA Brand Colors -->
+    <color name="nova_primary">#00D4FF</color>
+    <color name="nova_primary_variant">#0099CC</color>
+    <color name="nova_secondary">#7B2FFF</color>
+    <color name="nova_secondary_variant">#5500CC</color>
+    <color name="nova_accent">#FF6B35</color>
+    <color name="nova_glow">#00FFFF</color>
+    <color name="nova_orb_core">#00D4FF</color>
+    <color name="nova_orb_mid">#7B2FFF</color>
+    <color name="nova_orb_outer">#001A33</color>
+
+    <!-- Background -->
+    <color name="bg_deep_space">#010B18</color>
+    <color name="bg_space">#020D1F</color>
+    <color name="bg_surface">#061428</color>
+    <color name="bg_surface_variant">#0A1E35</color>
+    <color name="bg_card">#0D2040</color>
+    <color name="bg_elevated">#102545</color>
+
+    <!-- Text -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0C8E0</color>
+    <color name="text_tertiary">#607B94</color>
+    <color name="text_disabled">#3A5068</color>
+    <color name="text_nova">#00D4FF</color>
+
+    <!-- Status -->
+    <color name="success">#00E676</color>
+    <color name="warning">#FFD740</color>
+    <color name="error">#FF5252</color>
+    <color name="info">#40C4FF</color>
+
+    <!-- Borders / Dividers -->
+    <color name="border_primary">#1A3A5C</color>
+    <color name="border_glow">#00D4FF40</color>
+    <color name="divider">#0F2540</color>
+
+    <!-- Scrim -->
+    <color name="scrim">#CC010B18</color>
+
+    <!-- Notification icon -->
+    <color name="notification_icon">#00D4FF</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
+</resources>

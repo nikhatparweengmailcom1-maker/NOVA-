@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name -->
+    <string name="app_name">NOVA</string>
+    <string name="app_tagline">Neural Omniscient Virtual Assistant</string>
+
+    <!-- Notification channels -->
+    <string name="notification_channel_service">NOVA Assistant</string>
+    <string name="notification_channel_service_desc">NOVA foreground service keeps the assistant alive</string>
+    <string name="notification_channel_reminders">Reminders &amp; Alarms</string>
+    <string name="notification_channel_reminders_desc">NOVA reminder and alarm notifications</string>
+    <string name="notification_channel_updates">Updates</string>
+    <string name="notification_channel_updates_desc">Informational messages from NOVA</string>
+
+    <!-- Service notification -->
+    <string name="notification_service_title">NOVA is active</string>
+    <string name="notification_service_text">Say "Hi NOVA" to get started</string>
+    <string name="notification_service_paused">NOVA is paused — tap Resume to continue</string>
+    <string name="notification_action_pause">Pause</string>
+    <string name="notification_action_resume">Resume</string>
+    <string name="notification_action_stop">Stop</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_ai_provider">AI Provider</string>
+    <string name="settings_api_key">API Key</string>
+    <string name="settings_wake_phrase">Wake Phrase</string>
+    <string name="settings_tts_speed">Speech Speed</string>
+    <string name="settings_tts_pitch">Pitch</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_about">About</string>
+
+    <!-- Chat -->
+    <string name="chat_input_hint">Message NOVA…</string>
+    <string name="chat_thinking">NOVA is thinking…</string>
+    <string name="chat_listening">Listening…</string>
+    <string name="chat_wake_hint">Say "Hi NOVA" to wake me</string>
+
+    <!-- Accessibility -->
+    <string name="cd_send_message">Send message</string>
+    <string name="cd_voice_input">Start voice input</string>
+    <string name="cd_stop_listening">Stop listening</string>
+    <string name="cd_open_settings">Open settings</string>
+    <string name="cd_clear_chat">Clear conversation</string>
+    <string name="cd_nova_orb">NOVA status orb</string>
+    <string name="cd_copy_message">Copy message</string>
+    <string name="cd_speak_message">Speak message aloud</string>
+
+    <!-- Permissions -->
+    <string name="perm_mic_rationale">Microphone access is needed for voice commands and wake phrase detection.</string>
+    <string name="perm_contacts_rationale">Contacts access lets NOVA make calls and send messages to your contacts.</string>
+    <string name="perm_camera_rationale">Camera access is needed for QR code scanning and OCR.</string>
+    <string name="perm_calendar_rationale">Calendar access lets NOVA read and create events for you.</string>
+
+    <!-- Errors -->
+    <string name="error_api_key_missing">No API key set. Go to Settings → AI Provider to add one.</string>
+    <string name="error_network">Network error. Please check your connection and try again.</string>
+    <string name="error_tts_unavailable">Text-to-speech engine not available on this device.</string>
+    <string name="error_speech_unavailable">Speech recognition not available on this device.</string>
+    <string name="error_generic">Something went wrong. Please try again.</string>
+
+    <!-- FileProvider authority -->
+    <string name="file_provider_authority" translatable="false">com.nova.assistant.fileprovider</string>
+</resources>
