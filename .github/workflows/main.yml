@@ -26,7 +26,7 @@ jobs:
       # ── 3. Bootstrap gradle-wrapper.jar (not stored in git) ──────────────────
       - name: Bootstrap Gradle Wrapper
         run: |
-          cd nova-android
+          cd .
           if [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
             echo "Downloading Gradle 8.4 to generate wrapper jar..."
             curl -fsSL https://services.gradle.org/distributions/gradle-8.4-bin.zip \
@@ -45,11 +45,11 @@ jobs:
 
       # ── 5. Make gradlew executable ────────────────────────────────────────────
       - name: Grant execute permission for gradlew
-        run: chmod +x nova-android/gradlew
+        run: chmod +x gradlew
 
       # ── 7. Build debug APK ────────────────────────────────────────────────────
       - name: Build Debug APK
-        working-directory: nova-android
+        working-directory: .
         run: ./gradlew assembleDebug --stacktrace --no-daemon
         env:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false"
@@ -58,7 +58,7 @@ jobs:
       - name: Rename APK
         run: |
           mkdir -p apk-output
-          cp nova-android/app/build/outputs/apk/debug/app-debug.apk \
+          cp app/build/outputs/apk/debug/app-debug.apk \
              apk-output/NOVA-debug-${{ github.run_number }}.apk
           echo "APK_PATH=apk-output/NOVA-debug-${{ github.run_number }}.apk" \
              >> $GITHUB_ENV
